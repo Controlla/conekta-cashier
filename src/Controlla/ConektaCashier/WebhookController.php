@@ -23,16 +23,26 @@ class WebhookController extends Controller
         $payload = $this->getJsonPayload();
 
         if (!$this->eventExistsOnConekta($payload['id'])) {
-            return;
+            return $this->missingConektaEvent($payload);
         }
 
         $method = 'handle'.studly_case(str_replace('.', '_', $payload['type']));
+        $eventClass = "\\Controlla\\ConektaCashier\\Events\\$eventClass";
 
-        if (method_exists($this, $method)) {
-            return $this->{$method}($payload);
+        // Fire BeforeAll event.
+        event(new Events\BeforeAll($payload));
+
+        // Fire event if exists, otherwise fire Missing
+        if (class_exists($eventClass)) {
+            event(new $eventClass($payload));
         } else {
-            return $this->missingMethod();
+            event(new Events\Missing($payload));
         }
+
+        // Fire AfterAll event.
+        event(new Events\AfterAll($payload));
+
+        return $this->eventDispatched();
     }
 
     /**
@@ -48,7 +58,7 @@ class WebhookController extends Controller
             Conekta::setApiKey(Config::get('services.conekta.secret'));
 
             return !is_null(Conekta\Event::where(['id' => $id]));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -84,6 +94,18 @@ class WebhookController extends Controller
     }
 
     /**
+     * Get the billable entity instance by Payload object.
+     *
+     * @param array $payload
+     *
+     * @return \Dinkbit\ConektaCashier\BillableInterface
+     */
+    protected function getBillableFromPayload($payload)
+    {
+        return $this->getBillable($payload['data']['object']['customer_info']['customer_id']);
+    }
+
+    /**
      * Get the JSON payload for the request.
      *
      * @return array
@@ -103,5 +125,27 @@ class WebhookController extends Controller
     public function missingMethod($parameters = [])
     {
         return new Response();
+    }
+
+    /**
+     * Returns a succesful response.
+     *
+     * @return mixed
+     */
+    public function eventDispatched()
+    {
+        return new Response("", 200);
+    }
+
+    /**
+     * Handle calls to missing Conekta's events.
+     *
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    public function missingConektaEvent($parameters = [])
+    {
+        return new Response("", 404);
     }
 }

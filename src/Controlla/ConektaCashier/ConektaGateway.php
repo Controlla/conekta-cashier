@@ -56,6 +56,7 @@ class ConektaGateway
         $this->billable = $billable;
 
         Conekta::setApiKey($billable->getConektaKey());
+        Conekta::setApiVersion("2.0.0");
     }
 
     /**
@@ -68,34 +69,36 @@ class ConektaGateway
      */
     public function charge($amount, array $options = [])
     {
-        $attribs = array_merge([
-            'currency' => 'MXN',
-            'customer_info' => [
-                'customer_id' => $this->getConektaCustomer()->id
-            ],
-            'line_items' => [
-                [
-                    'name' => $this->defaultChargeName(),
-                    'unit_price' => $amount,
-                    'quantity' => 1
-                ]
-            ],
-            'charges' => [
-                [
-                    'payment_method' => [
-                        'type' => 'default',
-                    ]
-                ]
-            ]
-        ], $options);
+         if(!$customer = $this->getConektaCustomer()) {
+            if (array_key_exists('payment_method', $options) && $options['payment_method'] == 'oxxo_cash') {
+                $options['token'] = null;
+            } else {
+                if (!array_key_exists('token', $options) && $this->billable->hasConektaId()) {
+                    $options['card'] = $this->billable->getConektaId();
+                }
 
-        try {
-            $response = Order::create($attribs);
-        } catch (Error $e) {
-            return false;
+                if (!array_key_exists('token', $options)) {
+                    throw new InvalidArgumentException('No payment source provided.');
+                }
+            }
+
+            $customer = $this->createConektaCustomer($options['token'], $this->billable->getCustomerInfo());
+            $this->updateLocalConektaData($customer);
+        } else if(array_key_exists('token', $options)){
+            if (isset($customer->payment_sources) && is_array($customer->payment_sources) && array_key_exists($customer->payment_sources[0])) {
+                $customer->payment_sources[0]->delete();
+            }
+            
+            $customer->createPaymentSource(array(
+                'token_id' => $options['token'],
+                'type' => 'card'
+            ));
+            $customer = $this->getConektaCustomer();
+            $this->updateLocalConektaData($customer);
         }
 
-        return $response;
+        return Order::create($this->billable->getDefaultOrder($customer, $amount, $options['product_name'] ?? null, $options['payment_method'] ?? null));
+
     }
 
     /**
@@ -288,7 +291,7 @@ class ConektaGateway
 
         $card = $customer->createCard(['token' => $token]);
 
-        $customer->update(['default_card_id' => $card->id]);
+        $customer->update(['default_payment_sources_id' => $card->id]);
 
         if ($customer->subscription) {
             $customer->updateSubscription(['card' => $card->id]);
@@ -344,7 +347,7 @@ class ConektaGateway
      *
      * @return \Conekta\Customer
      */
-    public function createConektaCustomer($token, array $properties = [])
+    public function createConektaCustomer($token = null, array $properties = [])
     {
         $payment_sources = [[
             'token_id' => $token,
@@ -365,8 +368,13 @@ class ConektaGateway
      */
     public function getConektaCustomer($id = null)
     {
-        $customer = Customer::retrieve($id ?: $this->billable->getConektaId());
-
+        
+        try {
+            $customer = Customer::retrieve($id ?: $this->billable->getConektaId());
+        } catch(Conekta\ParameterValidationError $e) {
+            // No customer;
+            $customer = null;
+        }
         return $customer;
     }
 
@@ -379,13 +387,13 @@ class ConektaGateway
      */
     protected function getLastFourCardDigits($customer)
     {
-        if (empty($customer->cards[0])) {
+        if (empty($customer->payment_sources[0])) {
             return;
         }
 
-        if ($customer->default_card_id) {
-            foreach ($customer->cards as $card) {
-                if ($card->id == $customer->default_card_id) {
+        if ($customer->default_payment_sources_id) {
+            foreach ($customer->payment_sources as $card) {
+                if ($card->id == $customer->default_payment_sources_id) {
                     return $card->last4;
                 }
             }
@@ -393,7 +401,7 @@ class ConektaGateway
             return;
         }
 
-        return $customer->cards[0]->last4;
+        return $customer->payment_sources[0]->last4;
     }
 
     /**
@@ -405,13 +413,13 @@ class ConektaGateway
      */
     protected function getCardType($customer)
     {
-        if (empty($customer->cards[0])) {
+        if (empty($customer->payment_sources[0])) {
             return;
         }
 
-        if ($customer->default_card_id) {
-            foreach ($customer->cards as $card) {
-                if ($card->id == $customer->default_card_id) {
+        if ($customer->default_payment_sources_id) {
+            foreach ($customer->payment_sources as $card) {
+                if ($card->id == $customer->default_payment_sources_id) {
                     return $card->brand;
                 }
             }
@@ -419,7 +427,7 @@ class ConektaGateway
             return;
         }
 
-        return $customer->cards[0]->brand;
+        return $customer->payment_sources[0]->brand;
     }
 
     /**
