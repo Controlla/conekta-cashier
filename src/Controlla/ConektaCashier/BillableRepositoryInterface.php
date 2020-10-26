@@ -1,6 +1,6 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
 interface BillableRepositoryInterface
 {
@@ -9,7 +9,7 @@ interface BillableRepositoryInterface
      *
      * @param string $conektaId
      *
-     * @return \Dinkbit\ConektaCashier\BillableInterface
+     * @return \Controlla\ConektaCashier\BillableInterface
      */
     public function find($conektaId);
 }

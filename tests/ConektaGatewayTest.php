@@ -1,7 +1,7 @@
 <?php
 
 use Carbon\Carbon;
-use Dinkbit\ConektaCashier\ConektaGateway;
+use Controlla\ConektaCashier\ConektaGateway;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +16,7 @@ class ConektaGatewayTest extends TestCase
     {
         $billable = $this->mockBillableInterface();
         $billable->shouldReceive('getCurrency')->andReturn('mxn');
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData]', [$billable, 'plan']);
         $gateway->shouldReceive('createConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $customer->shouldReceive('updateSubscription')->once()->with([
             'plan'                   => 'plan',
@@ -33,7 +33,7 @@ class ConektaGatewayTest extends TestCase
     {
         $billable = $this->mockBillableInterface();
         $billable->shouldReceive('getCurrency')->andReturn('mxn');
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData]', [$billable, 'plan']);
         $gateway->shouldReceive('createConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $customer->shouldReceive('updateSubscription')->once()->with([
             'plan'                   => 'plan',
@@ -52,7 +52,7 @@ class ConektaGatewayTest extends TestCase
     {
         $billable = $this->mockBillableInterface();
         $billable->shouldReceive('getCurrency')->andReturn('mxn');
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData,updateCard]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer,createConektaCustomer,updateLocalConektaData,updateCard]', [$billable, 'plan']);
         $gateway->shouldReceive('createConektaCustomer')->never();
         $customer = m::mock('StdClass');
         $customer->shouldReceive('updateSubscription')->once()->andReturn($sub = (object) ['id' => 'sub_id']);
@@ -68,7 +68,7 @@ class ConektaGatewayTest extends TestCase
     public function testSwapCallsCreateWithProperArguments()
     {
         $billable = $this->mockBillableInterface();
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[create,getConektaCustomer,maintainTrial]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[create,getConektaCustomer,maintainTrial]', [$billable, 'plan']);
         $gateway->shouldReceive('getConektaCustomer')->once()->andReturn($customer = m::mock('StdClass'));
         $gateway->shouldReceive('maintainTrial')->once();
         $gateway->shouldReceive('create')->once()->with(null, null, $customer);
@@ -79,7 +79,7 @@ class ConektaGatewayTest extends TestCase
     public function testCancellingOfSubscriptions()
     {
         $billable = $this->mockBillableInterface();
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
         $gateway->shouldReceive('getConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $customer->subscription = (object) ['billing_cycle_end' => $time = time(), 'trial_end' => null];
         $billable->shouldReceive('setSubscriptionEndDate')->once()->with(m::type('Carbon\Carbon'))->andReturnUsing(function ($value) use ($time) {
@@ -97,7 +97,7 @@ class ConektaGatewayTest extends TestCase
     public function testCancellingOfSubscriptionsWithTrials()
     {
         $billable = $this->mockBillableInterface();
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
         $gateway->shouldReceive('getConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $customer->subscription = (object) ['billing_cycle_end' => $trialTime = time() + 50, 'trial_end' => time()];
         $billable->shouldReceive('setSubscriptionEndDate')->once()->with(m::type('Carbon\Carbon'))->andReturnUsing(function ($value) use ($trialTime) {
@@ -115,7 +115,7 @@ class ConektaGatewayTest extends TestCase
     public function testUpdatingCreditCardData()
     {
         $billable = $this->mockBillableInterface();
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer,getLastFourCardDigits,getCardType]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer,getLastFourCardDigits,getCardType]', [$billable, 'plan']);
         $gateway->shouldAllowMockingProtectedMethods();
         $gateway->shouldReceive('getConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $gateway->shouldReceive('getLastFourCardDigits')->once()->andReturn('1111');
@@ -138,7 +138,7 @@ class ConektaGatewayTest extends TestCase
     public function testRetrievingACustomersConektaPlanId()
     {
         $billable = $this->mockBillableInterface();
-        $gateway = m::mock('Dinkbit\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
+        $gateway = m::mock('Controlla\ConektaCashier\ConektaGateway[getConektaCustomer]', [$billable, 'plan']);
         $gateway->shouldReceive('getConektaCustomer')->andReturn($customer = m::mock('StdClass'));
         $customer->subscription = (object) ['plan_id' => 1];
 
@@ -177,7 +177,7 @@ class ConektaGatewayTest extends TestCase
 
     protected function mockBillableInterface()
     {
-        $billable = m::mock('Dinkbit\ConektaCashier\Contracts\Billable');
+        $billable = m::mock('Controlla\ConektaCashier\Contracts\Billable');
         $billable->shouldReceive('getConektaKey')->andReturn('key');
 
         return $billable;

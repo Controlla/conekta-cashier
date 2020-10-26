@@ -1,6 +1,6 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,7 +23,7 @@ class CashierServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Dinkbit\ConektaCashier\BillableRepositoryInterface', function () {
+        $this->app->singleton('Controlla\ConektaCashier\BillableRepositoryInterface', function () {
             return new EloquentBillableRepository();
         });
 

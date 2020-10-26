@@ -1,6 +1,6 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
 use Carbon\Carbon;
 use Conekta\Charge;
@@ -8,8 +8,8 @@ use Conekta\Conekta;
 use Conekta\Error;
 use Conekta\Order;
 use DateTime;
-use Dinkbit\ConektaCashier\Contracts\Billable as BillableContract;
-use Dinkbit\ConektaCashier\Customer;
+use Controlla\ConektaCashier\Contracts\Billable as BillableContract;
+use Controlla\ConektaCashier\Customer;
 use InvalidArgumentException;
 
 class ConektaGateway
@@ -17,7 +17,7 @@ class ConektaGateway
     /**
      * The billable instance.
      *
-     * @var \Dinkbit\ConektaCashier\Contracts\Billable
+     * @var \Controlla\ConektaCashier\Contracts\Billable
      */
     protected $billable;
 
@@ -45,7 +45,7 @@ class ConektaGateway
     /**
      * Create a new Conekta gateway instance.
      *
-     * @param \Dinkbit\ConektaCashier\Contracts\Billable $billable
+     * @param \Controlla\ConektaCashier\Contracts\Billable $billable
      * @param string|null                                $plan
      *
      * @return void
@@ -425,7 +425,7 @@ class ConektaGateway
     /**
      * Indicate that no trial should be enforced on the operation.
      *
-     * @return \Dinkbit\ConektaCashier\ConektaGateway
+     * @return \Controlla\ConektaCashier\ConektaGateway
      */
     public function skipTrial()
     {
@@ -439,7 +439,7 @@ class ConektaGateway
      *
      * @param \DateTime $trialEnd
      *
-     * @return \Dinkbit\ConektaCashier\ConektaGateway
+     * @return \Controlla\ConektaCashier\ConektaGateway
      */
     public function trialFor(DateTime $trialEnd)
     {
@@ -461,7 +461,7 @@ class ConektaGateway
     /**
      * Maintain the days left of the current trial (if applicable).
      *
-     * @return \Dinkbit\ConektaCashier\ConektaGateway
+     * @return \Controlla\ConektaCashier\ConektaGateway
      */
     public function maintainTrial()
     {

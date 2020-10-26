@@ -1,22 +1,22 @@
 {
-    "name": "dinkbit/conekta-cashier",
-    "description": "Dinkbit Cashier nos da una interface para cobrar subscripciones con Conketa en Laravel.",
-    "keywords": ["dinkbit", "conekta", "laravel", "billing"],
+    "name": "controlla/conekta-cashier",
+    "description": "Controlla Cashier nos da una interface para cobrar subscripciones con Conketa en Laravel.",
+    "keywords": ["controlla", "conekta", "laravel", "billing"],
     "license": "MIT",
     "authors": [
         {
-            "name": "dinkbit",
-            "email": "developers@dinkbit.com",
-            "homepage": "https://github.com/dinkbit/conekta-cashier"
+            "name": "controlla",
+            "email": "developers@controlla.com",
+            "homepage": "https://github.com/controlla/conekta-cashier"
         },
         {
             "name": "Rafael Masri",
-            "email": "rafael.masri@dinkbit.com",
+            "email": "rafael.masri@controlla.com",
             "role": "Developer"
         },
         {
             "name": "Joseph Cohen",
-            "email": "joseph.cohen@dinkbit.com",
+            "email": "joseph.cohen@controlla.com",
             "role": "Developer"
         }
     ],
@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Dinkbit\\ConektaCashier\\": "src/"
+            "Controlla\\ConektaCashier\\": "src/"
         }
     },
     "extra": {
@@ -49,7 +49,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Dinkbit\\ConektaCashier\\CashierServiceProvider"
+                "Controlla\\ConektaCashier\\CashierServiceProvider"
             ]
         }
     }

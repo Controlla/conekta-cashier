@@ -1,8 +1,8 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
-use Dinkbit\ConektaCashier\Contracts\Billable as BillableContract;
+use Controlla\ConektaCashier\Contracts\Billable as BillableContract;
 use Illuminate\Support\Facades\Config;
 
 class EloquentBillableRepository implements BillableRepositoryInterface
@@ -12,7 +12,7 @@ class EloquentBillableRepository implements BillableRepositoryInterface
      *
      * @param string $conektaId
      *
-     * @return \Dinkbit\ConektaCashier\BillableInterface
+     * @return \Controlla\ConektaCashier\BillableInterface
      */
     public function find($conektaId)
     {
@@ -26,7 +26,7 @@ class EloquentBillableRepository implements BillableRepositoryInterface
      *
      * @param string $model
      *
-     * @return \Dinkbit\ConektaCashier\BillableInterface
+     * @return \Controlla\ConektaCashier\BillableInterface
      */
     protected function createCashierModel($class)
     {

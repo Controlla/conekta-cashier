@@ -29,7 +29,7 @@ class WebhookControllerTest extends TestCase
     }
 }
 
-class WebhookControllerTestStub extends Dinkbit\ConektaCashier\WebhookController
+class WebhookControllerTestStub extends Controlla\ConektaCashier\WebhookController
 {
     public function handleChargeSucceeded()
     {

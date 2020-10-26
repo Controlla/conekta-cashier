@@ -1,6 +1,6 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
 use Conekta\Conekta;
 use Conekta\Event;
@@ -76,11 +76,11 @@ class WebhookController extends Controller
      *
      * @param string $conektaId
      *
-     * @return \Dinkbit\ConektaCashier\BillableInterface
+     * @return \Controlla\ConektaCashier\BillableInterface
      */
     protected function getBillable($conektaId)
     {
-        return App::make('Dinkbit\ConektaCashier\BillableRepositoryInterface')->find($conektaId);
+        return App::make('Controlla\ConektaCashier\BillableRepositoryInterface')->find($conektaId);
     }
 
     /**

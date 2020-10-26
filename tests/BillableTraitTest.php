@@ -105,9 +105,9 @@ class BillableTraitTest extends TestCase
     }
 }
 
-class BillableTraitTestStub implements Dinkbit\ConektaCashier\Contracts\Billable
+class BillableTraitTestStub implements Controlla\ConektaCashier\Contracts\Billable
 {
-    use Dinkbit\ConektaCashier\Billable;
+    use Controlla\ConektaCashier\Billable;
     public $cardUpFront = false;
 
     public function save()
@@ -115,9 +115,9 @@ class BillableTraitTestStub implements Dinkbit\ConektaCashier\Contracts\Billable
     }
 }
 
-class BillableTraitCardUpFrontTestStub implements Dinkbit\ConektaCashier\Contracts\Billable
+class BillableTraitCardUpFrontTestStub implements Controlla\ConektaCashier\Contracts\Billable
 {
-    use Dinkbit\ConektaCashier\Billable;
+    use Controlla\ConektaCashier\Billable;
     public $cardUpFront = true;
 
     public function save()

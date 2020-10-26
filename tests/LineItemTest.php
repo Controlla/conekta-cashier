@@ -1,6 +1,6 @@
 <?php
 
-use Dinkbit\ConektaCashier\LineItem;
+use Controlla\ConektaCashier\LineItem;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class LineItemTest extends TestCase
 
     public function testReceivingDollarTotal()
     {
-        $line = new LineItem($billable = m::mock('Dinkbit\ConektaCashier\Contracts\Billable'), (object) ['amount' => 10000]);
+        $line = new LineItem($billable = m::mock('Controlla\ConektaCashier\Contracts\Billable'), (object) ['amount' => 10000]);
         $billable->shouldReceive('formatCurrency')->andReturn(100.00);
         $this->assertEquals(100.00, $line->total());
     }

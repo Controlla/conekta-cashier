@@ -1,6 +1,6 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;

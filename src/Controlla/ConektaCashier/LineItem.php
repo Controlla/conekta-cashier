@@ -1,15 +1,15 @@
 <?php
 
-namespace Dinkbit\ConektaCashier;
+namespace Controlla\ConektaCashier;
 
-use Dinkbit\ConektaCashier\Contracts\Billable as BillableContract;
+use Controlla\ConektaCashier\Contracts\Billable as BillableContract;
 
 class LineItem
 {
     /**
      * The billable instance.
      *
-     * @var \Dinkbit\ConektaCashier\Contracts\Billable
+     * @var \Controlla\ConektaCashier\Contracts\Billable
      */
     protected $billable;
 
