@@ -74,7 +74,6 @@ trait Billable
     {
          (new ConektaGateway($this))->createCard($token, $options);
     }
-
     
     /**
      * Update customer's credit card.

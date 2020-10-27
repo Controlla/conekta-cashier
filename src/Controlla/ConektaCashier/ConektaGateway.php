@@ -101,7 +101,6 @@ class ConektaGateway
 
     }
 
-
      /**
      * Make a "one off" charge on the customer for the given amount.
      *
@@ -112,18 +111,18 @@ class ConektaGateway
     public function createCard($token, array $options = [])
     {
         if(!$customer = $this->getConektaCustomer()) {
-           
+
             $customer = $this->createConektaCustomer($token, $this->billable->getCustomerInfo());
             $this->updateLocalConektaData($customer);
+ 
         } else {
-          $customer->createPaymentSource(array(
+ 
+            $customer->createPaymentSource(array(
                 'token_id' => $token,
                 'type' => 'card'
             ));
+ 
         }
-
-        
-
     }
 
     /**
