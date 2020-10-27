@@ -64,6 +64,18 @@ trait Billable
     }
 
     /**
+     * Make a "one off" charge on the customer for the given amount.
+     *
+     * @param int   $amount
+     * @param array $options
+     *
+     */
+    public function createCard($token, array $options = [])
+    {
+         (new ConektaGateway($this))->createCard($token, $options);
+    }
+    
+    /**
      * Update customer's credit card.
      *
      * @param string $token
@@ -474,4 +486,5 @@ trait Billable
     {
         static::$conektaKey = $key;
     }
+
 }
