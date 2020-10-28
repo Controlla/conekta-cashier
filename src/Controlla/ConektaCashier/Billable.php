@@ -247,6 +247,19 @@ trait Billable
         return !is_null($this->conekta_id);
     }
 
+     /**
+     * Get the required info to create the customer.
+     *
+     * @return array
+     */
+    public function getCustomerInfo()
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email
+        ];
+    }
+
     /**
      * Get the Conekta ID for the entity.
      *

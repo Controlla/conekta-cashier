@@ -7,6 +7,7 @@ use Conekta\Charge;
 use Conekta\Conekta;
 use Conekta\Error;
 use Conekta\Order;
+use Conekta\ParameterValidationError;
 use DateTime;
 use Controlla\ConektaCashier\Contracts\Billable as BillableContract;
 use Controlla\ConektaCashier\Customer;
@@ -159,19 +160,7 @@ class ConektaGateway
         $this->updateLocalConektaData($customer);
     }
 
-    /**
-     * Get the required info to create the customer.
-     *
-     * @return array
-     */
-    public function getCustomerInfo()
-    {
-        return [
-            'name' => $this->name,
-            'email' => $this->email
-        ];
-    }
-
+   
     /**
      * Build the payload for a subscription create / update.
      *
@@ -408,7 +397,7 @@ class ConektaGateway
         
         try {
             $customer = Customer::retrieve($id ?: $this->billable->getConektaId());
-        } catch(Conekta\ParameterValidationError $e) {
+        } catch(ParameterValidationError $e) {
             // No customer;
             $customer = null;
         }
