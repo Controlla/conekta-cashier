@@ -47,6 +47,9 @@ trait Billable
         return (new ConektaGateway($this))->charge($amount, $options);
     }
 
+
+    
+
     /**
      * Get a new billing gateway instance for the given plan.
      *
@@ -75,6 +78,25 @@ trait Billable
          (new ConektaGateway($this))->createCard($token, $options);
     }
     
+
+      /**
+     * get cards of customer.
+     *
+     */
+    public function getCards()
+    {
+       return (new ConektaGateway($this))->getCards();
+    }
+
+      /**
+     * get cards of customer.
+     *
+     */
+    public function getCardDefault()
+    {
+       return (new ConektaGateway($this))->getCardDefault();
+    }
+    
     /**
      * Update customer's credit card.
      *
@@ -85,6 +107,17 @@ trait Billable
     public function updateCard($token)
     {
         return $this->subscription()->updateCard($token);
+    }
+
+    /**
+     * change default card of customer.
+     *
+     */
+    public function getChangeDefault($defaultIdCard)
+
+    {
+        
+       return (new ConektaGateway($this))->getChangeDefault($defaultIdCard);
     }
 
     /**
@@ -247,7 +280,7 @@ trait Billable
         return !is_null($this->conekta_id);
     }
 
-     /**
+    /**
      * Get the required info to create the customer.
      *
      * @return array
@@ -257,6 +290,38 @@ trait Billable
         return [
             'name' => $this->name,
             'email' => $this->email
+        ];
+    }
+
+    /**
+     * create an array to get default order data for new order 
+     *
+     * @return array
+     */
+    public function getDefaultOrder($customer, $amount, $productName, $paymentMethod)
+    {
+        return  [
+            "line_items" => [
+                [
+                "name" => "Recarga",
+                "unit_price" => $amount,
+                "quantity" => 1
+                ]
+            ],
+            "currency" => "MXN",
+            "customer_info" => [
+                "name" => $customer->name,
+                "email" => $customer->email,
+                "phone" => $this->phone_number
+            ],
+            "charges" => [
+                [
+                "payment_method" => [
+                    "type" => $paymentMethod,
+                    
+                ]
+                ]
+            ]
         ];
     }
 
