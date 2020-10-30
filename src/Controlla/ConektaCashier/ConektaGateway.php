@@ -98,7 +98,9 @@ class ConektaGateway
             $this->updateLocalConektaData($customer);
         }
 
-        return Order::create($this->billable->getDefaultOrder($customer, $amount, $options['product_name'] ?? null, $options['payment_method'] ?? null));
+        $order = Order::create($this->billable->getDefaultOrder($customer, $amount, $options['product_name'] ?? null, $options['payment_method'] ?? null));
+
+        return json_decode($order, true);
 
     }
 
@@ -124,6 +126,42 @@ class ConektaGateway
             ));
  
         }
+    }
+/**
+     * get cards of customer.
+     *
+     */
+    public function getCards()
+    {
+        $customer = $this->getConektaCustomer();
+        return json_decode($customer['payment_sources']);
+     
+    }
+
+
+    /**
+     * get card default
+     *
+     */
+    public function getCardDefault()
+    {
+        $customer = $this->getConektaCustomer();
+        $payment_sources =  json_decode($customer['payment_sources']);
+        foreach ((array)$payment_sources as $card) {
+            if ($card->default) {
+                return $card;
+            }
+        }
+    }
+
+    /**
+     * get card default
+     *
+     */
+    public function getChangeDefault($defaultIdCard)
+    {
+        $customer = $this->getConektaCustomer();
+        return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
     }
 
     /**
@@ -160,7 +198,6 @@ class ConektaGateway
         $this->updateLocalConektaData($customer);
     }
 
-   
     /**
      * Build the payload for a subscription create / update.
      *
@@ -317,7 +354,7 @@ class ConektaGateway
 
         $card = $customer->createCard(['token' => $token]);
 
-        $customer->update(['default_payment_sources_id' => $card->id]);
+        $customer->update(['default_payment_source_id' => $card->id]);
 
         if ($customer->subscription) {
             $customer->updateSubscription(['card' => $card->id]);
@@ -417,9 +454,9 @@ class ConektaGateway
             return;
         }
 
-        if ($customer->default_payment_sources_id) {
+        if ($customer->default_payment_source_id) {
             foreach ($customer->payment_sources as $card) {
-                if ($card->id == $customer->default_payment_sources_id) {
+                if ($card->id == $customer->default_payment_source_id) {
                     return $card->last4;
                 }
             }
@@ -443,9 +480,9 @@ class ConektaGateway
             return;
         }
 
-        if ($customer->default_payment_sources_id) {
+        if ($customer->default_payment_source_id) {
             foreach ($customer->payment_sources as $card) {
-                if ($card->id == $customer->default_payment_sources_id) {
+                if ($card->id == $customer->default_payment_source_id) {
                     return $card->brand;
                 }
             }
