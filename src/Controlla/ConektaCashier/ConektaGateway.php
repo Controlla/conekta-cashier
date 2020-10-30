@@ -161,7 +161,7 @@ class ConektaGateway
     public function getChangeDefault($defaultIdCard)
     {
         $customer = $this->getConektaCustomer();
-        return $customer->update(['default_payment_sources_id' => $defaultIdCard]);       
+        return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
     }
 
     /**
@@ -354,7 +354,7 @@ class ConektaGateway
 
         $card = $customer->createCard(['token' => $token]);
 
-        $customer->update(['default_payment_sources_id' => $card->id]);
+        $customer->update(['default_payment_source_id' => $card->id]);
 
         if ($customer->subscription) {
             $customer->updateSubscription(['card' => $card->id]);
@@ -454,9 +454,9 @@ class ConektaGateway
             return;
         }
 
-        if ($customer->default_payment_sources_id) {
+        if ($customer->default_payment_source_id) {
             foreach ($customer->payment_sources as $card) {
-                if ($card->id == $customer->default_payment_sources_id) {
+                if ($card->id == $customer->default_payment_source_id) {
                     return $card->last4;
                 }
             }
@@ -480,9 +480,9 @@ class ConektaGateway
             return;
         }
 
-        if ($customer->default_payment_sources_id) {
+        if ($customer->default_payment_source_id) {
             foreach ($customer->payment_sources as $card) {
-                if ($card->id == $customer->default_payment_sources_id) {
+                if ($card->id == $customer->default_payment_source_id) {
                     return $card->brand;
                 }
             }
