@@ -113,11 +113,10 @@ trait Billable
      * change default card of customer.
      *
      */
-    public function getChangeDefault($defaultIdCard)
-
+    public function setCardDefault($defaultIdCard)
     {
         
-       return (new ConektaGateway($this))->getChangeDefault($defaultIdCard);
+       return (new ConektaGateway($this))->setCardDefault($defaultIdCard);
     }
 
     /**

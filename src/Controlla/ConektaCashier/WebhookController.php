@@ -27,26 +27,16 @@ class WebhookController extends Controller
         }
 
         $method = 'handle'.studly_case(str_replace('.', '_', $payload['type']));
-        $eventClass = "\\Controlla\\ConektaCashier\\Events\\$eventClass";
 
-        // Fire BeforeAll event.
-        event(new Events\BeforeAll($payload));
-
-        // Fire event if exists, otherwise fire Missing
-        if (class_exists($eventClass)) {
-            event(new $eventClass($payload));
+        if (method_exists($this, $method)) {
+            return $this->{$method}($payload);
         } else {
-            event(new Events\Missing($payload));
+            return $this->missingMethod();
         }
-
-        // Fire AfterAll event.
-        event(new Events\AfterAll($payload));
-
-        return $this->eventDispatched();
     }
 
     /**
-     * Verify with Stripe that the event is genuine.
+     * Verify with Conekta that the event is genuine.
      *
      * @param string $id
      *
@@ -58,7 +48,7 @@ class WebhookController extends Controller
             Conekta::setApiKey(Config::get('services.conekta.secret'));
 
             return !is_null(Conekta\Event::where(['id' => $id]));
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -98,7 +88,7 @@ class WebhookController extends Controller
      *
      * @param array $payload
      *
-     * @return \Dinkbit\ConektaCashier\BillableInterface
+     * @return \Controlla\ConektaCashier\BillableInterface
      */
     protected function getBillableFromPayload($payload)
     {
@@ -125,16 +115,6 @@ class WebhookController extends Controller
     public function missingMethod($parameters = [])
     {
         return new Response();
-    }
-
-    /**
-     * Returns a succesful response.
-     *
-     * @return mixed
-     */
-    public function eventDispatched()
-    {
-        return new Response("", 200);
     }
 
     /**
