@@ -158,7 +158,7 @@ class ConektaGateway
      * get card default
      *
      */
-    public function getChangeDefault($defaultIdCard)
+    public function setCardDefault($defaultIdCard)
     {
         $customer = $this->getConektaCustomer();
         return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
