@@ -155,7 +155,7 @@ class ConektaGateway
     }
 
     /**
-     * get card default
+     * set card default
      *
      */
     public function setCardDefault($defaultIdCard)
