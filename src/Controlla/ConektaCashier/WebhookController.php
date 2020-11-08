@@ -47,7 +47,7 @@ class WebhookController extends Controller
         try {
             Conekta::setApiKey(Config::get('services.conekta.secret'));
 
-            return !is_null(Conekta\Event::where(['id' => $id]));
+            return !is_null(Event::where(['id' => $id]));
         } catch (Exception $e) {
             return false;
         }
@@ -95,6 +95,11 @@ class WebhookController extends Controller
         return $this->getBillable($payload['data']['object']['customer_info']['customer_id']);
     }
 
+    public function FunctionName(Type $var = null)
+    {
+        # code...
+    }
+
     /**
      * Get the JSON payload for the request.
      *
@@ -114,7 +119,7 @@ class WebhookController extends Controller
      */
     public function missingMethod($parameters = [])
     {
-        return new Response();
+        return new Response("", 200);
     }
 
     /**
