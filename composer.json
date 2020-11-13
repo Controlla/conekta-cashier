@@ -23,8 +23,8 @@
     "require": {
         "php": "^7.1",
         "conekta/conekta-php": "4.0.*",
-        "illuminate/filesystem": "5.7.*|5.8|6.0|7.0",
-        "illuminate/support": "5.7.*|5.8|6.0|7.0"
+        "illuminate/filesystem": "^5.7|^5.8|^6.0|^7.0",
+        "illuminate/support": "^5.7|^5.8|^6.0|^7.0"
     },
     "require-dev": {
         "illuminate/routing": "~5.7|5.8|6.0|7.0",
