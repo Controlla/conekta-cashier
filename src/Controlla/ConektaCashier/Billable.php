@@ -310,6 +310,7 @@ trait Billable
             ],
             "currency" => "MXN",
             "customer_info" => [
+                "customer_id" => $customer->id,
                 "name" => $customer->name,
                 "email" => $customer->email,
                 "phone" => $this->phone_number
