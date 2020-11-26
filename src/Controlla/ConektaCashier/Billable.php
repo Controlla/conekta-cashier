@@ -114,7 +114,6 @@ trait Billable
      *
      */
     public function setCardDefault($defaultIdCard)
-
     {
         
        return (new ConektaGateway($this))->setCardDefault($defaultIdCard);
