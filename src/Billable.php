@@ -302,7 +302,7 @@ trait Billable
         return  [
             "line_items" => [
                 [
-                "name" => "Recarga",
+                "name" => $productName,
                 "unit_price" => $amount,
                 "quantity" => 1
                 ]
@@ -316,10 +316,7 @@ trait Billable
             ],
             "charges" => [
                 [
-                "payment_method" => [
-                    "type" => $paymentMethod,
-                    
-                ]
+                    "payment_method" => $paymentMethod
                 ]
             ]
         ];

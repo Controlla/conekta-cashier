@@ -71,7 +71,7 @@ class ConektaGateway
     public function charge($amount, array $options = [])
     {
          if(!$customer = $this->getConektaCustomer()) {
-            if (array_key_exists('payment_method', $options) && $options['payment_method'] == 'oxxo_cash') {
+            if (array_key_exists('payment_method', $options) && $options['payment_method']['type'] == 'oxxo_cash') {
                 $options['token'] = null;
             } else {
                 if (!array_key_exists('token', $options) && $this->billable->hasConektaId()) {
@@ -85,7 +85,7 @@ class ConektaGateway
 
             $customer = $this->createConektaCustomer($options['token'], $this->billable->getCustomerInfo());
             $this->updateLocalConektaData($customer);
-        } else if(array_key_exists('token', $options)){
+        } else if(array_key_exists('token', $options)) {
             if (isset($customer->payment_sources) && is_array($customer->payment_sources) && array_key_exists($customer->payment_sources[0])) {
                 $customer->payment_sources[0]->delete();
             }
@@ -98,7 +98,7 @@ class ConektaGateway
             $this->updateLocalConektaData($customer);
         }
 
-        $order = Order::create($this->billable->getDefaultOrder($customer, $amount, $options['product_name'] ?? null, $options['payment_method'] ?? null));
+        $order = Order::create($this->billable->getDefaultOrder($customer, $amount, $options['product_name'] ?? 'Single charge', $options['payment_method'] ?? null));
 
         return json_decode($order, true);
 
@@ -412,10 +412,10 @@ class ConektaGateway
      */
     public function createConektaCustomer($token = null, array $properties = [])
     {
-        $payment_sources = [[
+        $payment_sources = !is_null($token) ? [[
             'token_id' => $token,
             'type' => 'card'
-        ]];
+        ]] : [];
         
         $customer = Customer::create(
             array_merge(['payment_sources' => $payment_sources], $properties)
