@@ -120,6 +120,18 @@ trait Billable
     }
 
     /**
+     * delete customer's credit card.
+     *
+     * @param string $paymentSourceId
+     *
+     * @return void
+     */
+    public function deleteCard($paymentSourceId)
+    {
+        return (new ConektaGateway($this))->deletePaymentSourceById($paymentSourceId);
+    }
+
+    /**
      * Determine if the entity is within their trial period.
      *
      * @return bool

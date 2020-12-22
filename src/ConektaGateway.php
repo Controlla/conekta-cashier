@@ -127,7 +127,8 @@ class ConektaGateway
  
         }
     }
-/**
+
+    /**
      * get cards of customer.
      *
      */
@@ -162,6 +163,16 @@ class ConektaGateway
     {
         $customer = $this->getConektaCustomer();
         return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
+    }
+
+    /**
+     * delete card by id
+     *
+     */
+    public function deletePaymentSourceById($paymentSourceId)
+    {
+        $customer = $this->getConektaCustomer();
+        $customer->deletePaymentSourceById($paymentSourceId);       
     }
 
     /**
