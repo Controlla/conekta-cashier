@@ -75,7 +75,7 @@ trait Billable
      */
     public function createCard($token, array $options = [])
     {
-         (new ConektaGateway($this))->createCard($token, $options);
+        return (new ConektaGateway($this))->createCard($token, $options);
     }
     
 

@@ -117,10 +117,10 @@ class ConektaGateway
 
             $customer = $this->createConektaCustomer($token, $this->billable->getCustomerInfo());
             $this->updateLocalConektaData($customer);
- 
+            return $customer->payment_sources[0];
         } else {
  
-            $customer->createPaymentSource(array(
+            return $customer->createPaymentSource(array(
                 'token_id' => $token,
                 'type' => 'card'
             ));
