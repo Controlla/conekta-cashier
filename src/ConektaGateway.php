@@ -117,17 +117,18 @@ class ConektaGateway
 
             $customer = $this->createConektaCustomer($token, $this->billable->getCustomerInfo());
             $this->updateLocalConektaData($customer);
- 
+            return $customer->payment_sources[0];
         } else {
  
-            $customer->createPaymentSource(array(
+            return $customer->createPaymentSource(array(
                 'token_id' => $token,
                 'type' => 'card'
             ));
  
         }
     }
-/**
+
+    /**
      * get cards of customer.
      *
      */
@@ -162,6 +163,16 @@ class ConektaGateway
     {
         $customer = $this->getConektaCustomer();
         return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
+    }
+
+    /**
+     * delete card by id
+     *
+     */
+    public function deletePaymentSourceById($paymentSourceId)
+    {
+        $customer = $this->getConektaCustomer();
+        $customer->deletePaymentSourceById($paymentSourceId);       
     }
 
     /**

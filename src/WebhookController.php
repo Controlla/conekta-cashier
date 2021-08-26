@@ -6,6 +6,7 @@ use Conekta\Conekta;
 use Conekta\Event;
 use Exception;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
@@ -26,7 +27,7 @@ class WebhookController extends Controller
             return $this->missingConektaEvent($payload);
         }
 
-        $method = 'handle'.studly_case(str_replace('.', '_', $payload['type']));
+        $method = 'handle'.Str::studly(str_replace('.', '_', $payload['type']));
 
         if (method_exists($this, $method)) {
             return $this->{$method}($payload);

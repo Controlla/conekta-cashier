@@ -75,7 +75,7 @@ trait Billable
      */
     public function createCard($token, array $options = [])
     {
-         (new ConektaGateway($this))->createCard($token, $options);
+        return (new ConektaGateway($this))->createCard($token, $options);
     }
     
 
@@ -117,6 +117,18 @@ trait Billable
     {
         
        return (new ConektaGateway($this))->setCardDefault($defaultIdCard);
+    }
+
+    /**
+     * delete customer's credit card.
+     *
+     * @param string $paymentSourceId
+     *
+     * @return void
+     */
+    public function deleteCard($paymentSourceId)
+    {
+        return (new ConektaGateway($this))->deletePaymentSourceById($paymentSourceId);
     }
 
     /**
