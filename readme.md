@@ -36,7 +36,7 @@ Laravel Cashier provides an expressive, fluent interface to [Conekta's](https://
 
 First, add the Cashier package to your `composer.json` file:
 
-	"dinkbit/conekta-cashier": "~2.0" (For Conekta 1.0.0 PHP-SDK 2.0)
+	"controlla/conekta-cashier": "~2.0" (For Conekta 1.0.0 PHP-SDK 2.0)
 
 #### Service Provider
 
