@@ -43,22 +43,6 @@ class ConektaGateway
      */
     protected $skipTrial = false;
 
-    /**
-     * Create a new Conekta gateway instance.
-     *
-     * @param \Controlla\ConektaCashier\Contracts\Billable $billable
-     * @param string|null                                $plan
-     *
-     * @return void
-     */
-    public function __construct(BillableContract $billable, $plan = null)
-    {
-        $this->plan = $plan;
-        $this->billable = $billable;
-
-        Conekta::setApiKey($billable->getConektaKey());
-        Conekta::setApiVersion("2.0.0");
-    }
 
     /**
      * Make a "one off" charge on the customer for the given amount.
@@ -435,22 +419,6 @@ class ConektaGateway
         return $this->getConektaCustomer($customer->id);
     }
 
-    /**
-     * Get the Conekta customer for entity.
-     *
-     * @return \Conekta\Customer
-     */
-    public function getConektaCustomer($id = null)
-    {
-        
-        try {
-            $customer = Customer::retrieve($id ?: $this->billable->getConektaId());
-        } catch(ParameterValidationError $e) {
-            // No customer;
-            $customer = null;
-        }
-        return $customer;
-    }
 
     /**
      * Get the last four credit card digits for a customer.

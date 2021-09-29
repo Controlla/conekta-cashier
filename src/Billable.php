@@ -4,9 +4,13 @@ namespace Controlla\ConektaCashier;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Controlla\ConektaCashier\ConektaGateway;
+
+use Controlla\ConektaCashier\Concerns\ManagesCustomer;
 
 trait Billable
 {
+    use ManagesCustomer;
     /**
      * The Conekta API key.
      *
@@ -240,7 +244,7 @@ trait Billable
      */
     public function readyForBilling()
     {
-        return !is_null($this->getConektaId());
+        return !is_null($this->conektaId());
     }
 
     /**
@@ -282,29 +286,6 @@ trait Billable
     }
 
     /**
-     * Deteremine if the entity has a Conekta customer ID.
-     *
-     * @return bool
-     */
-    public function hasConektaId()
-    {
-        return !is_null($this->conekta_id);
-    }
-
-    /**
-     * Get the required info to create the customer.
-     *
-     * @return array
-     */
-    public function getCustomerInfo()
-    {
-        return [
-            'name' => $this->name,
-            'email' => $this->email
-        ];
-    }
-
-    /**
      * create an array to get default order data for new order 
      *
      * @return array
@@ -332,40 +313,6 @@ trait Billable
                 ]
             ]
         ];
-    }
-
-    /**
-     * Get the Conekta ID for the entity.
-     *
-     * @return string
-     */
-    public function getConektaId()
-    {
-        return $this->conekta_id;
-    }
-
-    /**
-     * Get the name of the Conekta ID database column.
-     *
-     * @return string
-     */
-    public function getConektaIdName()
-    {
-        return 'conekta_id';
-    }
-
-    /**
-     * Set the Conekta ID for the entity.
-     *
-     * @param string $conekta_id
-     *
-     * @return \Controlla\ConektaCashier\Contracts\Billable
-     */
-    public function setConektaId($conekta_id)
-    {
-        $this->conekta_id = $conekta_id;
-
-        return $this;
     }
 
     /**

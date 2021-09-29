@@ -2,6 +2,7 @@
 
 namespace Controlla\ConektaCashier;
 
+use Controlla\ConektaCashier\Cashier;
 use Illuminate\Support\ServiceProvider;
 
 class CashierServiceProvider extends ServiceProvider
@@ -13,7 +14,7 @@ class CashierServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        $this->registerMigrations();
     }
 
     /**
@@ -23,14 +24,30 @@ class CashierServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('Controlla\ConektaCashier\BillableRepositoryInterface', function () {
-            return new EloquentBillableRepository();
-        });
+        $this->configure();
+    }
 
-        $this->app->singleton('command.conekta.cashier.table', function ($app) {
-            return new CashierTableCommand();
-        });
+    /**
+     * Setup the configuration for Cashier.
+     *
+     * @return void
+     */
+    protected function configure()
+    {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/conekta-cashier.php', 'conekta-cashier'
+        );
+    }
 
-        $this->commands('command.conekta.cashier.table');
+    /**
+     * Register the package migrations.
+     *
+     * @return void
+     */
+    protected function registerMigrations()
+    {
+        if (Cashier::$runsMigrations && $this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
     }
 }
