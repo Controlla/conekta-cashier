@@ -1,9 +1,11 @@
 # Laravel Conekta Cashier
 
-[![Build Status](https://img.shields.io/travis/dinkbit/conekta-cashier.svg?style=flat-square)](https://travis-ci.org/dinkbit/conekta-cashier)
-[![StyleCI](https://styleci.io/repos/22849643/shield)](https://styleci.io/repos/22849643)
-
-[![image](https://s3.amazonaws.com/dinkbit/img/firmas/firma_dinkbit.png)](<http://dinkbit.com>)
+<p align="center">
+<a href="https://github.com/Controlla/conekta-cashier/actions"><img src="https://github.com/controlla/cashier/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/dt/controlla/conekta-cashier" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/v/controlla/conekta-cashier" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/l/controlla/conekta-cashier" alt="License"></a>
+</p>
 
 Port of Stripe [Laravel Cashier](https://github.com/laravel/cashier) to Conekta
 
