@@ -25,24 +25,17 @@ class CustomerTest extends TestCase
     //     $this->assertFalse($user->onGenericTrial());
     // }
 
-    // public function test_we_can_determine_if_it_has_a_payment_method()
-    // {
-    //     $user = new User;
-    //     $user->pm_type = 'visa';
+    public function test_we_can_determine_if_it_has_a_payment_method()
+    {
+        $user = new User;
+        $user->card_type = 'visa';
 
-    //     $this->assertTrue($user->hasDefaultPaymentMethod());
+        $this->assertTrue($user->hasDefaultPaymentMethod());
 
-    //     $user = new User;
+        $user = new User;
 
-    //     $this->assertFalse($user->hasDefaultPaymentMethod());
-    // }
-
-    // public function test_default_payment_method_returns_null_when_the_user_is_not_a_customer_yet()
-    // {
-    //     $user = new User;
-
-    //     $this->assertNull($user->defaultPaymentMethod());
-    // }
+        $this->assertFalse($user->hasDefaultPaymentMethod());
+    }
 
     public function test_conekta_customer_method_throws_exception_when_conekta_id_is_not_set()
     {
@@ -53,13 +46,13 @@ class CustomerTest extends TestCase
         $user->asConektaCustomer();
     }
 
-    // public function test_conekta_customer_cannot_be_created_when_conekta_id_is_already_set()
-    // {
-    //     $user = new User();
-    //     $user->conekta_id = 'foo';
+    public function test_conekta_customer_cannot_be_created_when_conekta_id_is_already_set()
+    {
+        $user = new User();
+        $user->conekta_id = 'foo';
 
-    //     $this->expectException(CustomerAlreadyCreated::class);
+        $this->expectException(CustomerAlreadyCreated::class);
 
-    //     $user->createAsConektaCustomer();
-    // }
+        $user->createAsConektaCustomer();
+    }
 }
