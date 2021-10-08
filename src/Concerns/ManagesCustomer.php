@@ -142,6 +142,16 @@ trait ManagesCustomer
     }
 
     /**
+     * Get the Conekta supported currency used by the customer.
+     *
+     * @return string
+     */
+    public function preferredCurrency()
+    {
+        return config('conekta-cashier.currency');
+    }
+
+    /**
      * Get the Conekta SDK client.
      *
      * @return \Conekta\ConektaClient

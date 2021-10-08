@@ -129,9 +129,9 @@ class Cashier
      *
      * @return \Conekta\Customer
      */
-    public function updateCustomer($id, array $properties = [])
+    public function updateCustomer($conektaId, array $properties = [])
     {
-        $customer = $this->getCustomer($id);
+        $customer = $this->getCustomer($conektaId);
 
         $customer->update($properties);
 
@@ -141,13 +141,14 @@ class Cashier
     /**
      * Get the Conekta customer for entity.
      *
-     * @return \Conekta\Customer
+     * @param  \Controllla\Customer|string|null  $conektaId
+     * @return \Controlla\ConektaCashier\Billable|null
      */
-    public function getCustomer($id = null)
+    public function getCustomer($conektaId = null)
     {
         
         try {
-            $customer = Customer::find($id ?: $this->billable->conektaId());
+            $customer = Customer::find($conektaId);
         } catch(ParameterValidationError $e) {
             // No customer;
             $customer = null;
