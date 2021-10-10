@@ -2,11 +2,16 @@
 
 namespace Controlla\ConektaCashier;
 
+use Money\Money;
+use Money\Currency;
 use Conekta\Conekta;
+use Conekta\Order;
+use NumberFormatter;
 use Conekta\Customer;
 use Conekta\Subscription;
+use Money\Currencies\ISOCurrencies;
 use Controlla\ConektaCashier\Cashier;
-use Controlla\ConektaCashier\Contracts\Billable as BillableContract;
+use Money\Formatter\IntlMoneyFormatter;
 
 class Cashier
 {
@@ -23,13 +28,6 @@ class Cashier
      * @var string
      */
     const CONEKTA_VERSION = '2.0.0';
-
-    /**
-     * The billable instance.
-     *
-     * @var \Controlla\ConektaCashier\Contracts\Billable
-     */
-    protected $billable;
 
     /**
      * The custom currency formatter.
@@ -90,14 +88,47 @@ class Cashier
     /**
      * Create a new Cashier instance.
      *
-     * @param \Controlla\ConektaCashier\Contracts\Billable $billable
-     *
      * @return void
      */
     public function __construct(array $options = [])
     {
         Conekta::setApiKey($options['api_key'] ?? config('conekta-cashier.secret'));
         Conekta::setApiVersion(static::CONEKTA_VERSION);
+    }
+
+    /**
+     * Set the custom currency formatter.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function formatCurrencyUsing(callable $callback)
+    {
+        static::$formatCurrencyUsing = $callback;
+    }
+
+    /**
+     * Format the given amount into a displayable currency.
+     *
+     * @param  int  $amount
+     * @param  string|null  $currency
+     * @param  string|null  $locale
+     * @return string
+     */
+    public static function formatAmount($amount, $currency = null, $locale = null)
+    {
+        if (static::$formatCurrencyUsing) {
+            return call_user_func(static::$formatCurrencyUsing, $amount, $currency);
+        }
+
+        $money = new Money($amount, new Currency(strtoupper($currency ?? config('conekta-cashier.currency'))));
+
+        $locale = $locale ?? config('cashier.currency_locale');
+
+        $numberFormatter = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
+
+        return $moneyFormatter->format($money);
     }
 
     /**
@@ -154,5 +185,31 @@ class Cashier
             $customer = null;
         }
         return $customer;
+    }
+
+    /**
+     * Get the customer instance by its Conekta ID.
+     *
+     * @param  \Conekta\Customer|string|null  $conektaId
+     * @return \Controlla\ConektaCashier\Billable|null
+     */
+    public static function findBillable($conektaId)
+    {
+        $conektaId = $conektaId instanceof Customer ? $conektaId->id : $conektaId;
+
+        return $conektaId ? Customer::find($conektaId) : null;
+    }
+
+    /**
+    * Make a "one off" charge on the customer for the given amount.
+    *
+    * @param int   $amount
+    * @param array $options
+    *
+    * @return \Conekta\Order
+    */
+    public function charge(array $options = [])
+    {
+        return Order::create($options);
     }
 }

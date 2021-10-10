@@ -10,7 +10,7 @@ class CustomerTest extends FeatureTestCase
         $customer = $user->createAsConektaCustomer();
 
 
-        $this->assertEquals('Taylor Otwell', $customer->name);
+        $this->assertEquals('Ivan Sotelo', $customer->name);
 
         $customer = $user->updateConektaCustomer(['name' => 'Mohamed Said']);
 

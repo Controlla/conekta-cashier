@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Config;
 use Controlla\ConektaCashier\ConektaGateway;
 
 use Controlla\ConektaCashier\Concerns\ManagesCustomer;
+use Controlla\ConektaCashier\Concerns\ManagesPaymentMethods;
 
 trait Billable
 {
     use ManagesCustomer;
+    use ManagesPaymentMethods;
+
     /**
      * The Conekta API key.
      *
@@ -453,72 +456,6 @@ trait Billable
         $this->subscription_ends_at = $date;
 
         return $this;
-    }
-
-    /**
-     * Get the Stripe supported currency used by the entity.
-     *
-     * @return string
-     */
-    public function getCurrency()
-    {
-        return 'mxn';
-    }
-
-    /**
-     * Get the locale for the currency used by the entity.
-     *
-     * @return string
-     */
-    public function getCurrencyLocale()
-    {
-        return 'es_MX';
-    }
-
-    /**
-     * Format the given currency for display, without the currency symbol.
-     *
-     * @param int $amount
-     *
-     * @return mixed
-     */
-    public function formatCurrency($amount)
-    {
-        return number_format($amount / 100, 2);
-    }
-
-    /**
-     * Add the currency symbol to a given amount.
-     *
-     * @param string $amount
-     *
-     * @return string
-     */
-    public function addCurrencySymbol($amount)
-    {
-        return '$'.$amount;
-    }
-
-    /**
-     * Get the Conekta API key.
-     *
-     * @return string
-     */
-    public static function getConektaKey()
-    {
-        return static::$conektaKey ?: Config::get('services.conekta.secret');
-    }
-
-    /**
-     * Set the Conekta API key.
-     *
-     * @param string $key
-     *
-     * @return void
-     */
-    public static function setConektaKey($key)
-    {
-        static::$conektaKey = $key;
     }
 
 }

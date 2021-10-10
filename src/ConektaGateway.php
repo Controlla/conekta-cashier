@@ -88,56 +88,8 @@ class ConektaGateway
 
     }
 
-     /**
-     * Make a "one off" charge on the customer for the given amount.
-     *
-     * @param int   $amount
-     * @param array $options
-     *
-     */
-    public function createCard($token, array $options = [])
-    {
-        if(!$customer = $this->getConektaCustomer()) {
-
-            $customer = $this->createConektaCustomer($token, $this->billable->getCustomerInfo());
-            $this->updateLocalConektaData($customer);
-            return $customer->payment_sources[0];
-        } else {
- 
-            return $customer->createPaymentSource(array(
-                'token_id' => $token,
-                'type' => 'card'
-            ));
- 
-        }
-    }
-
-    /**
-     * get cards of customer.
-     *
-     */
-    public function getCards()
-    {
-        $customer = $this->getConektaCustomer();
-        return json_decode($customer['payment_sources']);
-     
-    }
 
 
-    /**
-     * get card default
-     *
-     */
-    public function getCardDefault()
-    {
-        $customer = $this->getConektaCustomer();
-        $payment_sources =  json_decode($customer['payment_sources']);
-        foreach ((array)$payment_sources as $card) {
-            if ($card->default) {
-                return $card;
-            }
-        }
-    }
 
     /**
      * set card default
@@ -147,16 +99,6 @@ class ConektaGateway
     {
         $customer = $this->getConektaCustomer();
         return $customer->update(['default_payment_source_id' => $defaultIdCard]);       
-    }
-
-    /**
-     * delete card by id
-     *
-     */
-    public function deletePaymentSourceById($paymentSourceId)
-    {
-        $customer = $this->getConektaCustomer();
-        $customer->deletePaymentSourceById($paymentSourceId);       
     }
 
     /**
@@ -571,33 +513,4 @@ class ConektaGateway
         return $diff > 0 ? $this->trialFor(Carbon::now()->addHours($diff)) : $this->skipTrial();
     }
 
-    /**
-     * Get the Conekta API key for the instance.
-     *
-     * @return string
-     */
-    protected function getConektaKey()
-    {
-        return $this->billable->getConektaKey();
-    }
-
-    /**
-     * Get the currency for the billable entity.
-     *
-     * @return string
-     */
-    protected function getCurrency()
-    {
-        return $this->billable->getCurrency();
-    }
-
-    /**
-     * Get the default charge name
-     *
-     * @return string
-     */
-    protected function defaultChargeName()
-    {
-        return 'Single charge';
-    }
 }
