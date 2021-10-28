@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Config;
 use Controlla\ConektaCashier\ConektaGateway;
 
 use Controlla\ConektaCashier\Concerns\ManagesCustomer;
+use Controlla\ConektaCashier\Concerns\PerformsCharges;
 use Controlla\ConektaCashier\Concerns\ManagesPaymentMethods;
 
 trait Billable
 {
     use ManagesCustomer;
+    use PerformsCharges;
     use ManagesPaymentMethods;
 
     /**
@@ -40,23 +42,7 @@ trait Billable
     {
         $this->save();
     }
-
-    /**
-     * Make a "one off" charge on the customer for the given amount.
-     *
-     * @param int   $amount
-     * @param array $options
-     *
-     * @return bool|mixed
-     */
-    public function charge($amount, array $options = [])
-    {
-        return (new ConektaGateway($this))->charge($amount, $options);
-    }
-
-
     
-
     /**
      * Get a new billing gateway instance for the given plan.
      *

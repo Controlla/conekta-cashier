@@ -69,7 +69,7 @@ return [
     |
     */
 
-    'currency' => env('CASHIER_CURRENCY', 'mxn'),
+    'currency' => env('CASHIER_CURRENCY', 'MXN'),
 
     /*
     |--------------------------------------------------------------------------
