@@ -15,7 +15,7 @@ trait PerformsCharges
      *
      * @throws \Controlla\ConektaCashier\Exceptions\IncompletePayment
      */
-    public function charge($amount, $paymentMethod = null, array $options = [])
+    public function charge($amount, $paymentMethod = null, array $options = [], $monthlyInstallments = null)
     {
         $options = array_merge([
             'currency' => $this->preferredCurrency(),
@@ -50,6 +50,23 @@ trait PerformsCharges
         );
 
         return $order;
-        return $payment;
+    }
+
+    /**
+     * Refund a customer for a charge.
+     *
+     * @param  string  $paymentIntent
+     * @param  array  $options
+     * @return \Conekta\Refund
+     */
+    public function refund($paymentIntent, $amount, array $options = [])
+    {
+        $options = array_merge([
+            'reason' => 'requested_by_client'
+        ],
+        $amount ? ['amount' => $amount * 100] : []
+         ,$options);
+
+        return $this->conekta()->refund($paymentIntent, $options);
     }
 }

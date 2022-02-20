@@ -212,4 +212,17 @@ class Cashier
     {
         return Order::create($options);
     }
+
+    /**
+     * Refund a customer for a charge.
+     *
+     * @param  string  $paymentIntent
+     * @param  array  $options
+     */
+    public function refund($paymentIntent, array $options = [])
+    {
+        $order = Order::find($paymentIntent);
+        return $order->refund($options);
+    }
+
 }
