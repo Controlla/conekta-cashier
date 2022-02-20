@@ -54,6 +54,8 @@ trait ManagesPaymentMethods
      */
     public function addPaymentMethod($token, $type = 'card')
     {
+        $this->assertCustomerExists();
+
         $customer = $this->asConektaCustomer();
 
         $conektaPaymentMethod = $customer->createPaymentSource(array(

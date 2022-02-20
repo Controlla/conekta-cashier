@@ -33,16 +33,23 @@ trait PerformsCharges
             ]
         ], $options);
 
+        if ($monthlyInstallments) {
+             $options['charges'][0]['payment_method'] += [
+                'monthly_installments' => $monthlyInstallments
+            ];
+        }
+
         if ($this->hasConektaId()) {
             $options['customer_info'] =  [
                 'customer_id' => $this->conekta_id
             ];
         }
 
-        $payment = new Order(
+        $order = new Order(
             $this->conekta()->charge($options),
         );
 
+        return $order;
         return $payment;
     }
 }

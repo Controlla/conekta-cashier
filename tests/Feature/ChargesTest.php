@@ -13,7 +13,20 @@ class ChargesTest extends FeatureTestCase
 
         $paymentMethod = $user->addPaymentMethod('tok_test_visa_4242');
 
-        $response = $user->charge(1000, $paymentMethod->id);
+        $response = $user->charge(1000);
+
+        $this->assertInstanceOf(Order::class, $response);
+        $this->assertEquals(1000, $response->rawAmount());
+    }
+
+    public function test_customer_can_be_charged_monthly_installments()
+    {
+        $user = $this->createCustomer('customer_can_be_charged_monthly_installments');
+        $user->createAsConektaCustomer();
+
+        $paymentMethod = $user->addPaymentMethod('tok_test_visa_4242');
+
+        $response = $user->charge(1000, null, [], 3);
 
         $this->assertInstanceOf(Order::class, $response);
         $this->assertEquals(1000, $response->rawAmount());
