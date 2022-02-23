@@ -7,7 +7,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false"
+         stopOnFailure="true"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -19,6 +19,7 @@
     </testsuites>
     <php>
         <env name="DB_CONNECTION" value="testing"/>
+        <env name="CONEKTA_SECRET" value="key_GZ2AK3uHUVYpLxna4S5Vww"/>
         <env name="CASHIER_PAYMENT_NOTIFICATION" value="Laravel\Cashier\Notifications\ConfirmPayment"/>
     </php>
 </phpunit>
