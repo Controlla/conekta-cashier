@@ -5,7 +5,7 @@ namespace Controlla\ConektaCashier;
 use Money\Money;
 use Money\Currency;
 use Conekta\Conekta;
-use Conekta\Order;
+use Conekta\Webhook;
 use NumberFormatter;
 use Conekta\Customer;
 use Conekta\Subscription;
@@ -282,6 +282,16 @@ class Cashier
     {
         $order = Order::find($paymentIntent);
         return $order->refund($options);
+    }
+
+    /**
+     * Create the Conekta webhook to interact with Cashier.
+     *
+     * @param  array  $options
+     */
+    public function createWebhook(array $options = [])
+    {
+         Webhook::create($options);
     }
 
 }

@@ -4,6 +4,7 @@ namespace Controlla\ConektaCashier;
 
 use Controlla\ConektaCashier\Cashier;
 use Illuminate\Support\ServiceProvider;
+use Controlla\ConektaCashier\Console\WebhookCommand;
 
 class CashierServiceProvider extends ServiceProvider
 {
@@ -15,10 +16,11 @@ class CashierServiceProvider extends ServiceProvider
     public function boot()
     {
         // $this->registerLogger();
-        // $this->registerRoutes();
+        $this->registerRoutes();
         // $this->registerResources();
         $this->registerMigrations();
         $this->registerPublishing();
+        $this->registerCommands();
     }
 
     /**
@@ -41,6 +43,24 @@ class CashierServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/conekta-cashier.php', 'conekta-cashier'
         );
+    }
+
+    /**
+     * Register the package routes.
+     *
+     * @return void
+     */
+    protected function registerRoutes()
+    {
+        if (Cashier::$registersRoutes) {
+            Route::group([
+                'prefix' => config('cashier.path'),
+                'namespace' => 'Laravel\Cashier\Http\Controllers',
+                'as' => 'cashier.',
+            ], function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            });
+        }
     }
 
     /**
@@ -74,6 +94,20 @@ class CashierServiceProvider extends ServiceProvider
             // $this->publishes([
             //     __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
             // ], 'cashier-views');
+        }
+    }
+
+    /**
+     * Register the package's commands.
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                WebhookCommand::class,
+            ]);
         }
     }
 }
