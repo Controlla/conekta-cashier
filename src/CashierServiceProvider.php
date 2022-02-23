@@ -3,6 +3,7 @@
 namespace Controlla\ConektaCashier;
 
 use Controlla\ConektaCashier\Cashier;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Controlla\ConektaCashier\Console\WebhookCommand;
 

@@ -30,7 +30,8 @@ class WebhookCommand extends Command
      */
     public function handle()
     {
-        $endpoint = new Cashier()->createWebhook(['url' => $this->option('url') ?? route('cashier.webhook')]);
+        $endpoint = new Cashier();
+        $endpoint->createWebhook(['url' => $this->option('url') ?? route('cashier.webhook')]);
 
         $this->info('The Conekta webhook was created successfully. Retrieve the webhook secret in your Conekta dashboard and define it as an environment variable.');
     }

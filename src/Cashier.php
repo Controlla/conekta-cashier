@@ -3,6 +3,7 @@
 namespace Controlla\ConektaCashier;
 
 use Money\Money;
+use Conekta\Order;
 use Money\Currency;
 use Conekta\Conekta;
 use Conekta\Webhook;
