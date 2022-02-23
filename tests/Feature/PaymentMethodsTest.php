@@ -21,9 +21,9 @@ class PaymentMethodsTest extends FeatureTestCase
         $this->assertFalse($user->hasDefaultPaymentMethod());
     }
 
-    public function test_we_can_remove_payment_methods()
+    public function test_we_can_delete_payment_methods()
     {
-        $user = $this->createCustomer('we_can_remove_payment_methods');
+        $user = $this->createCustomer('we_can_delete_payment_methods');
         $user->createAsConektaCustomer();
 
         $paymentMethod = $user->addPaymentMethod('tok_test_visa_4242');
@@ -37,9 +37,9 @@ class PaymentMethodsTest extends FeatureTestCase
         $this->assertFalse($user->hasPaymentMethod());
     }
 
-    public function test_we_can_remove_the_default_payment_method()
+    public function test_we_can_delete_the_default_payment_method()
     {
-        $user = $this->createCustomer('we_can_remove_the_default_payment_method');
+        $user = $this->createCustomer('we_can_delete_the_default_payment_method');
         $user->createAsConektaCustomer();
 
         $paymentMethod = $user->updateDefaultPaymentMethod('tok_test_visa_4242');

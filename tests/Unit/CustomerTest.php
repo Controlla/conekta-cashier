@@ -37,6 +37,13 @@ class CustomerTest extends TestCase
         $this->assertFalse($user->hasDefaultPaymentMethod());
     }
 
+    public function test_default_payment_method_returns_null_when_the_user_is_not_a_customer_yet()
+    {
+        $user = new User;
+
+        $this->assertNull($user->defaultPaymentMethod());
+    }
+
     public function test_conekta_customer_method_throws_exception_when_conekta_id_is_not_set()
     {
         $user = new User;

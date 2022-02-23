@@ -132,6 +132,65 @@ class Cashier
     }
 
     /**
+     * Configure Cashier to not register its migrations.
+     *
+     * @return static
+     */
+    public static function ignoreMigrations()
+    {
+        static::$runsMigrations = false;
+
+        return new static;
+    }
+
+    /**
+     * Configure Cashier to not register its routes.
+     *
+     * @return static
+     */
+    public static function ignoreRoutes()
+    {
+        static::$registersRoutes = false;
+
+        return new static;
+    }
+
+    /**
+     * Configure Cashier to maintain past due subscriptions as active.
+     *
+     * @return static
+     */
+    public static function keepPastDueSubscriptionsActive()
+    {
+        static::$deactivatePastDue = false;
+
+        return new static;
+    }
+
+    /**
+     * Configure Cashier to automatically calculate taxes using Stripe Tax.
+     *
+     * @return static
+     */
+    public static function calculateTaxes()
+    {
+        static::$calculatesTaxes = true;
+
+        return new static;
+    }
+
+    /**
+     * Set the customer model class name.
+     *
+     * @param  string  $customerModel
+     * @return void
+     */
+    public static function useCustomerModel($customerModel)
+    {
+        static::$customerModel = $customerModel;
+    }
+
+    /**
      * Create a new Conekta customer instance.
      *
      * @param string $token

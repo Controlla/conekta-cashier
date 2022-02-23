@@ -14,7 +14,11 @@ class CashierServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // $this->registerLogger();
+        // $this->registerRoutes();
+        // $this->registerResources();
         $this->registerMigrations();
+        $this->registerPublishing();
     }
 
     /**
@@ -48,6 +52,28 @@ class CashierServiceProvider extends ServiceProvider
     {
         if (Cashier::$runsMigrations && $this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
+    }
+
+    /**
+     * Register the package's publishable resources.
+     *
+     * @return void
+     */
+    protected function registerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/conekta-cashier.php' => $this->app->configPath('conekta-cashier.php'),
+            ], 'cashier-config');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
+            ], 'cashier-migrations');
+
+            // $this->publishes([
+            //     __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/cashier'),
+            // ], 'cashier-views');
         }
     }
 }
