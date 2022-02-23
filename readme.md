@@ -216,13 +216,13 @@ Conekta can notify your application of a variety of events via webhooks. By defa
 
 By default, the Conekta Cashier webhook controller will automatically handle cancelling subscriptions that have too many failed charges (as defined by your Conekta settings), customer updates, customer deletions, subscription updates, and payment method changes; however, as we'll soon discover, you can extend this controller to handle any Conekta webhook event you like.
 
-To ensure your application can handle Conekta webhooks, be sure to configure the webhook URL in the Conekta control panel. By default, Cashier's webhook controller responds to the /conekta/webhook URL path.
+To ensure your application can handle Conekta webhooks, be sure to configure the webhook URL in the Conekta control panel. By default, Cashier's webhook controller responds to the `/conekta/webhook` URL path.
 
-For convenience, Cashier includes a cashier:webhook Artisan command. This command will create a webhook in Conekta that listens to all of the events required by Cashier:
+For convenience, Cashier includes a `cashier:webhook` Artisan command. This command will create a webhook in Conekta that listens to all of the events required by Cashier:
 
 	php artisan cashier:webhook
 
-By default, the created webhook will point to the URL defined by the APP_URL environment variable and the cashier.webhook route that is included with Cashier. You may provide the --url option when invoking the command if you would like to use a different URL:
+By default, the created webhook will point to the URL defined by the `APP_URL` environment variable and the `cashier.webhook` route that is included with Cashier. You may provide the `--url` option when invoking the command if you would like to use a different URL:
 
 	php artisan cashier:webhook --url "https://example.com/conekta/webhook"
 
@@ -230,10 +230,10 @@ By default, the created webhook will point to the URL defined by the APP_URL env
 
 Cashier automatically handles subscription cancellations for failed charges and other common Conekta webhook events. However, if you have additional webhook events you would like to handle, you may do so by listening to the following events that are dispatched by Cashier:
 
-- Controlla\ConektaCashier\Events\WebhookReceived
-- Controlla\ConektaCashier\Events\WebhookHandled
+- `Controlla\ConektaCashier\Events\WebhookReceived`
+- `Controlla\ConektaCashier\Events\WebhookHandled`
 
-Both events contain the full payload of the Conekta webhook. For example, if you wish to handle the charge.paid webhook, you may register a listener that will handle the event:
+Both events contain the full payload of the Conekta webhook. For example, if you wish to handle the `charge.paid` webhook, you may register a listener that will handle the event:
 
 	<?php
 	
@@ -243,21 +243,21 @@ Both events contain the full payload of the Conekta webhook. For example, if you
 	
 	class ConektaEventListener
 	{
-			/**
-			* Handle received Conekta webhooks.
-			*
-			* @param  \Controlla\ConektaCashier\Events\WebhookReceived  $event
-			* @return void
-			*/
-			public function handle(WebhookReceived $event)
-			{
-					if ($event->payload['type'] === 'charge.paid') {
-							// Handle the incoming event...
-					}
+		/**
+		* Handle received Conekta webhooks.
+		*
+		* @param  \Controlla\ConektaCashier\Events\WebhookReceived  $event
+		* @return void
+		*/
+		public function handle(WebhookReceived $event)
+		{
+			if ($event->payload['type'] === 'charge.paid') {
+				// Handle the incoming event...
 			}
+		}
 	}
 
-Once your listener has been defined, you may register it within your application's EventServiceProvider:
+Once your listener has been defined, you may register it within your application's `EventServiceProvider`:
 
 	<?php
 	
@@ -269,11 +269,11 @@ Once your listener has been defined, you may register it within your application
 	
 	class EventServiceProvider extends ServiceProvider
 	{
-			protected $listen = [
-					WebhookReceived::class => [
-							ConektaEventListener::class,
-					],
-			];
+		protected $listen = [
+			WebhookReceived::class => [
+				ConektaEventListener::class,
+			],
+		];
 	}
 
 ## Testing
@@ -282,7 +282,7 @@ When testing an application that uses Cashier, you may mock the actual HTTP requ
 
 When testing, remember that Cashier itself already has a great test suite, so you should only focus on testing the subscription and payment flow of your own application and not every underlying Cashier behavior.
 
-To get started, add the testing version of your Conekta secret to your phpunit.xml file:
+To get started, add the **testing** version of your Conekta secret to your `phpunit.xml` file:
 
 	<env name="CONEKTA_SECRET" value="<your-key>"/>
 
