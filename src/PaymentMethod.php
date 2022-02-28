@@ -78,7 +78,7 @@ class PaymentMethod implements Arrayable, Jsonable, JsonSerializable {
      */
     public function toArray()
     {
-        return $this->order->toArray();
+        return $this->asConektaPaymentMethod()->toArray();
     }
 
     /**
