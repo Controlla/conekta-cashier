@@ -4,7 +4,9 @@ namespace Controlla\ConektaCashier\Http\Controllers;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Controller;
+use Controlla\ConektaCashier\Cashier;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Controlla\ConektaCashier\Events\WebhookHandled;
 use Controlla\ConektaCashier\Events\WebhookReceived;
 

@@ -63,6 +63,8 @@ trait ManagesPaymentMethods
             'type' => $type
         ));
 
+        $this->updateDefaultPaymentMethodFromConekta();
+
         return new PaymentMethod($this, $conektaPaymentMethod);
     }
 
