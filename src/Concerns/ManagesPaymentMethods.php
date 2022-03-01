@@ -130,15 +130,10 @@ trait ManagesPaymentMethods
     public function updateDefaultPaymentMethod($paymentMethod)
     {
         $this->assertCustomerExists();
-
+        
         $customer = $this->asConektaCustomer();
 
-        foreach ($customer->payment_sources as $paymentResource) {
-            if ($paymentResource->id === $paymentMethod) {
-                $conektaPaymentMethod = $this->resolveConektaPaymentMethod($paymentResource);
-            }
-        }
-
+        $conektaPaymentMethod = $this->resolveConektaPaymentMethod($paymentMethod);
 
         // If the customer already has the payment method as their default, we can bail out
         // of the call now. We don't need to keep adding the same payment method to this
@@ -248,6 +243,13 @@ trait ManagesPaymentMethods
             return $paymentMethod;
         }
 
-        return $paymentMethod;
+        $customer = $this->asConektaCustomer();
+
+        foreach ($customer->payment_sources as $paymentResource) {
+            if ($paymentResource->id === $paymentMethod) {
+                return $paymentResource;
+            }
+        }
+
     }
 }
