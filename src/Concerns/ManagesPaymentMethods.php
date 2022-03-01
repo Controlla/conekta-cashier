@@ -110,7 +110,7 @@ trait ManagesPaymentMethods
             return;
         }
 
-        $customer = $this->asConektaCustomer(['default_payment_source_id']);
+        $customer = $this->asConektaCustomer();
 
         if ($customer->default_payment_source_id) {
             foreach ($customer->payment_sources as $paymentMethod) {
@@ -133,7 +133,12 @@ trait ManagesPaymentMethods
 
         $customer = $this->asConektaCustomer();
 
-        $conektaPaymentMethod = $this->addPaymentMethod($paymentMethod);
+        foreach ($customer->payment_sources as $paymentResource) {
+            if ($paymentResource->id === $paymentMethod) {
+                $conektaPaymentMethod = $this->resolveConektaPaymentMethod($paymentResource);
+            }
+        }
+
 
         // If the customer already has the payment method as their default, we can bail out
         // of the call now. We don't need to keep adding the same payment method to this

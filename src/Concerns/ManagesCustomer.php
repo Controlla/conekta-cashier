@@ -115,10 +115,9 @@ trait ManagesCustomer
     /**
      * Get the Conekta customer for the model.
      *
-     * @param  array  $expand
      * @return \Conekta\Customer
      */
-    public function asConektaCustomer(array $expand = [])
+    public function asConektaCustomer()
     {
         $this->assertCustomerExists();
 

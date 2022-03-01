@@ -18,7 +18,7 @@ class PaymentMethodsTest extends FeatureTestCase
         $this->assertEquals('visa', $paymentMethod->brand);
         $this->assertEquals('4242', $paymentMethod->last4);
         $this->assertTrue($user->hasPaymentMethod());
-        $this->assertFalse($user->hasDefaultPaymentMethod());
+        $this->assertTrue($user->hasDefaultPaymentMethod());
     }
 
     public function test_we_can_delete_payment_methods()
@@ -42,7 +42,9 @@ class PaymentMethodsTest extends FeatureTestCase
         $user = $this->createCustomer('we_can_delete_the_default_payment_method');
         $user->createAsConektaCustomer();
 
-        $paymentMethod = $user->updateDefaultPaymentMethod('tok_test_visa_4242');
+        $paymentMethod = $user->addPaymentMethod('tok_test_visa_4242');
+
+        $user->updateDefaultPaymentMethod($paymentMethod->id);
 
         $this->assertCount(1, $user->paymentMethods());
         $this->assertTrue($user->hasPaymentMethod());
@@ -63,7 +65,9 @@ class PaymentMethodsTest extends FeatureTestCase
         $user = $this->createCustomer('we_can_set_a_default_payment_method');
         $user->createAsConektaCustomer();
 
-        $paymentMethod = $user->updateDefaultPaymentMethod('tok_test_visa_4242');
+        $paymentMethod = $user->addPaymentMethod('tok_test_visa_4242');
+
+        $user->updateDefaultPaymentMethod($paymentMethod->id);
 
         $this->assertInstanceOf(PaymentMethod::class, $paymentMethod);
         $this->assertEquals('visa', $paymentMethod->brand);
