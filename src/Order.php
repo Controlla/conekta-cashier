@@ -75,7 +75,7 @@ class Order implements Arrayable, Jsonable, JsonSerializable
      */
     public function toArray()
     {
-        return $this->order->toArray();
+        return (array) $this->order;
     }
 
     /**
