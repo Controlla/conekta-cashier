@@ -55,7 +55,7 @@ class WebhookController extends Controller
      */
     protected function handleCustomerUpdated(array $payload)
     {
-        if ($user = $this->getUserByConektaId($payload['data']['object']['customer_id'])) {
+        if ($user = $this->getUserByConektaId($payload['data']['object']['id'])) {
             $user->updateDefaultPaymentMethodFromConekta();
         }
 

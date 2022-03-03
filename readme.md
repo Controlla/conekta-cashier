@@ -16,6 +16,7 @@ ___
 # Conekta Cashier
 
 - [Introduction](#introduction)
+- [Installation](#instalation)
 - [Configuration](#configuration)
 - [Subscribing To A Plan](#subscribing-to-a-plan)
 - [Single Charges](#single-charges)
@@ -32,50 +33,82 @@ ___
 Conekta Cashier provides an expressive, fluent interface to [Conekta's](https://conekta.com) subscription billing services. It handles almost all of the boilerplate subscription billing code you are dreading writing. In addition to basic subscription management, Cashier can handle coupons, swapping subscription, subscription "quantities", cancellation grace periods, and even generate invoice PDFs.
 
 <a name="configuration"></a>
-## Configuration
+## Installation
 
-#### Composer
+First, install the Cashier package for Conekta using the Composer package manager:
 
-First, add the Controlla Cashier package to your `composer.json` file:
+	composer require conekta/conekta-cashier
 
-	"controlla/conekta-cashier": "~2.0"
+#### Database Migrations
 
-#### Service Provider
+Conekta's service provider registers its own database migration directory, so remember to migrate your database after installing the package. The Cashier migrations will add several columns to your `users` table as well as create a new subscriptions table to hold all of your customer's `subscriptions`:
 
-Next, register the `Controlla\ConektaCashier\CashierServiceProvider` in your `app` configuration file.
+	php artisan migrate
 
-#### Migration
+If you need to overwrite the migrations that ship with Cashier, you can publish them using the `vendor:publish` Artisan command:
 
-Before using Cashier, we'll need to add several columns to your database. Don't worry, you can use the `conekta-cashier:table` Artisan command to create a migration to add the necessary column. For example, to add the column to the users table use `php artisan conekta-cashier:table users`. Once the migration has been created, simply run the `migrate` command.
+	php artisan vendor:publish --tag="cashier-migrations"
 
-#### Model Setup
+If you would like to prevent Cashier's migrations from running entirely, you may use the `ignoreMigrations` method provided by Cashier. Typically, this method should be called in the `register` method of your `AppServiceProvider`:
 
-Next, add the `Billable` trait and appropriate date mutators to your model definition:
-
-	use Dinkbit\ConektaCashier\Billable;
-	use Dinkbit\ConektaCashier\Contracts\Billable as BillableContract;
-
-	class User extends Eloquent implements BillableContract {
-
-		use Billable;
-
-		protected $dates = ['trial_ends_at', 'subscription_ends_at'];
-
+	use Controlla\ConektaCashier\Cashier;
+	
+	/**
+	* Register any application services.
+	*
+	* @return void
+	*/
+	public function register()
+	{
+		Cashier::ignoreMigrations();
 	}
 
-#### Conekta Key
+## Configuration
 
-Finally, set your Conekta key in your `services.php` config file:
+#### Billable Model
 
-	'conekta' => [
-		'model'  => 'User',
-		'secret' => env('CONEKTA_API_SECRET'),
-	],
+Before using Cashier, add the `Billable` trait to your billable model definition. Typically, this will be the `App\Models\User` model. This trait provides various methods to allow you to perform common billing tasks, such as creating subscriptions, applying coupons, and updating payment method information:
 
-Alternatively you can store it in one of your bootstrap files or service providers, such as the `AppServiceProvider`:
+	use Controlla\ConektaCashier\Billable;
+	
+	class User extends Authenticatable
+	{
+		use Billable;
+	}
 
-	User::setConektaKey('conekta-key');
+Cashier assumes your billable model will be the `App\Models\User` class that ships with Laravel. If you wish to change this you may specify a different model via the `useCustomerModel` method. This method should typically be called in the boot method of your `AppServiceProvider` class:
 
+	use App\Models\Cashier\User;
+	use Controlla\ConektaCashier\Cashier;
+	
+	/**
+	* Bootstrap any application services.
+	*
+	* @return void
+	*/
+	public function boot()
+	{
+			Cashier::useCustomerModel(User::class);
+	}
+
+> :exclamation: If you're using a model other than Laravel's supplied `App\Models\User` model, you'll need to publish and alter the **Cashier migrations**(#instalation) provided to match your alternative model's table
+
+#### API Keys
+
+Next, you should configure your Conekta API keys in your application's `.env` file. You can retrieve your Conekta API keys from the Conekta control panel:
+
+	CONEKTA_KEY=your-conekta-key
+	CONEKTA_SECRET=your-conekta-secret
+
+#### Currency Configuration
+
+The default Cashier currency is Mexican pesos (MXN). You can change the default currency by setting the `CASHIER_CURRENCY` environment variable within your application's `.env` file:
+
+	CASHIER_CURRENCY=eur
+
+In addition to configuring Cashier's currency, you may also specify a locale to be used when formatting money values for display on invoices. Internally, Cashier utilizes `PHP's NumberFormatter class` to set the currency locale:
+
+	CASHIER_CURRENCY_LOCALE=nl_BE
 ## Subscribing To A Plan
 
 Once you have a model instance, you can easily subscribe that user to a given Conekta plan:
