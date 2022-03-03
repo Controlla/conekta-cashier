@@ -18,6 +18,7 @@ ___
 - [Introduction](#introduction)
 - [Installation](#instalation)
 - [Configuration](#configuration)
+- [Customers](#customers)
 - [Subscribing To A Plan](#subscribing-to-a-plan)
 - [Single Charges](#single-charges)
 - [Swapping Subscriptions](#swapping-subscriptions)
@@ -91,7 +92,7 @@ Cashier assumes your billable model will be the `App\Models\User` class that shi
 			Cashier::useCustomerModel(User::class);
 	}
 
-> :exclamation: If you're using a model other than Laravel's supplied `App\Models\User` model, you'll need to publish and alter the **Cashier migrations**(#instalation) provided to match your alternative model's table
+> :exclamation: If you're using a model other than Laravel's supplied `App\Models\User` model, you'll need to publish and alter the [**Cashier migrations**](#instalation) provided to match your alternative model's table
 
 #### API Keys
 
@@ -109,6 +110,20 @@ The default Cashier currency is Mexican pesos (MXN). You can change the default 
 In addition to configuring Cashier's currency, you may also specify a locale to be used when formatting money values for display on invoices. Internally, Cashier utilizes `PHP's NumberFormatter class` to set the currency locale:
 
 	CASHIER_CURRENCY_LOCALE=nl_BE
+
+## Customers
+### Retrieving Customers
+You can retrieve a customer by their Conekta ID using the Cashier::findBillable method. This method will return an instance of the billable model:
+
+	use Controlla\ConektaCashier\Cashier;
+	
+	$user = Cashier::findBillable($conektaId);
+
+### Creating Customers
+Occasionally, you may wish to create a Conekta customer without beginning a subscription. You may accomplish this using the createAsConektaCustomer method:
+
+	$conektaCustomer = $user->createAsConektaCustomer();
+
 ## Subscribing To A Plan
 
 Once you have a model instance, you can easily subscribe that user to a given Conekta plan:
