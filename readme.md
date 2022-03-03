@@ -1,7 +1,7 @@
 # Laravel Conekta Cashier
 
 <p align="center">
-<a href="https://github.com/Controlla/conekta-cashier/actions"><img src="https://github.com/controlla/cashier/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://github.com/Controlla/conekta-cashier/actions"><img src="https://github.com/Controlla/conekta-cashier/workflows/tests/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/dt/controlla/conekta-cashier" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/v/controlla/conekta-cashier" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/Controlla/conekta-cashier"><img src="https://img.shields.io/packagist/l/controlla/conekta-cashier" alt="License"></a>
