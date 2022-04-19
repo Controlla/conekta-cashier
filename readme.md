@@ -38,7 +38,7 @@ Conekta Cashier provides an expressive, fluent interface to [Conekta's](https://
 
 First, install the Cashier package for Conekta using the Composer package manager:
 
-	composer require conekta/conekta-cashier
+	composer require controlla/conekta-cashier
 
 #### Database Migrations
 
